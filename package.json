@@ -5,5 +5,5 @@
     "version": "0.1",
     "fullName": "Visualize Old Passwords",
     "id": "jid1-SfxiRASrd0mOBg",
-    "description": "a basic add-on"
+    "description": "This add-on displays a bullet graph visualization of how old the passwords in your password manager are. Activate by clicking the red padlock in the add-on bar."
 }
