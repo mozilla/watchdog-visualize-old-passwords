@@ -4,12 +4,34 @@
 
 var vis;
 var d3Data;
+var renderVizFunc = function(){};
 
 function init() {
-    window.loadLogins(function(logins) {
-		createViz(processLogins(logins));
-		createUI();
-    });
+    function initViz() {
+		window.loadLogins(function(logins) {
+			var processedData = processLogins(logins);
+			renderVizFunc = function() {
+				createViz(processedData);
+				createUI();
+			}
+			// Save this as a function so we can call it later on resize
+			renderVizFunc();
+	    });	
+    }
+	
+	initViz();
+	console.log(window);
+	
+	var resizeTimeout = -1;
+	$(window).resize(function() {
+		console.log('resize!');
+		if (resizeTimeout != -1)
+			clearTimeout(resizeTimeout);
+		resizeTimeout = setTimeout(function() {
+			resizeTimeout = -1;
+			renderVizFunc();
+		}, 400);
+	});
 }
 
 function processLogins(loginData) {
@@ -45,10 +67,15 @@ function processLogins(loginData) {
 			"ranges": [200], // Average recommended password use: 120 days
 			"measures":[daysNum],
 			"markers": timesUsed,
-			"full_times_used": loginData[login].timesUsed
+			"full_times_used": loginData[login].timesUsed,
+			"days_num": daysNum
 		}
 		d3Data.push(obj);
 	}
+	// Having converted the dict to a list, sort by age
+	d3Data.sort(function(a,b) {
+		return b.days_num - a.days_num;
+	});
 	// Go back and fill in maxDays as a new range, so as to normalize the bars
 	for (var idx in d3Data) {
 		d3Data[idx].ranges.push(maxDays);
@@ -57,14 +84,15 @@ function processLogins(loginData) {
 }
 
 function createViz(loginData) {
-	var w = 960,
+	$('#chart').empty();
+	var w = $('#chart').width(),
 	    h = 50,
 	    m = [5, 40, 20, 120]; // top right bottom left
 
 	var chart = bulletChart()
 	    .duration(1000) // Cute "slide" transition effect
-	    .width(w - m[1] - m[3])
-	    .height(h - m[0] - m[2]);
+	    .height(h - m[0] - m[2])
+	    .width(w - m[1] - m[3]);
 
 	vis = d3.select("#chart").selectAll("svg")
 	.data(loginData)
@@ -128,5 +156,7 @@ function createUI() {
 	d3.selectAll(".marker").on("mouseout", function(d,i) {
 		$('#passwordAgeInfo').hide();
 	});
-
+	
+	$('.bulletOverdue:last').after($('#overdueWarning'));
+	$('#overdueWarning').show();
 }

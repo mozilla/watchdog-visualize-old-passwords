@@ -1,5 +1,6 @@
 .bullet { font: 10px sans-serif; }
-.bullet .marker { stroke: #000; stroke-width: 2px; }
+.bullet .marker { stroke: #000; stroke-width: 3px; }
+.bullet .marker:hover { stroke: #ccccff; stroke-width: 3px; }
 .bullet .tick line { stroke: #666; stroke-width: .5px; }
 .bullet .range.s0 { fill: #eee; }
 .bullet .range.s1 { fill: #ddd; }

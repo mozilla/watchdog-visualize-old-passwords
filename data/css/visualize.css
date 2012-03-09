@@ -1,0 +1,18 @@
+#chart {
+	width:90%;
+	text-align:center;
+}
+
+#legend .overdueColor {
+	color:#dd9999;
+}
+
+#overdueWarning {
+	display:none;
+}
+
+.alert {
+	margin-left:auto;
+	margin-right:auto;
+	width:70%;
+}
