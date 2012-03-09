@@ -157,6 +157,7 @@ function createUI() {
 		$('#passwordAgeInfo').hide();
 	});
 	
-	$('.bulletOverdue:last').after($('#overdueWarning'));
-	$('#overdueWarning').show();
+	var clonedWarning = $('#overdueWarning').clone();
+	$('.bulletOverdue:last').after(clonedWarning);
+	clonedWarning.show();
 }
